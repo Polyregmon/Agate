@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "blog/styles.css" %}">
+</head>
+
+<body>
+
+<div class="scroll_container">
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+    <div class="loc" onclick="window.location='#coffee'">قهوه</div>
+    <div class="loc" onclick="window.location='#lemonade'">ماکتل</div>
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+    <div class="loc" onclick="window.location='#omlet'">صبحانه</div>
+
+</div>
+<br><br><br><br><br><br><br><br><br><br>
+{% if items %}
+    {% for item in items %}
+        <div class="grid-container">
+            <div class="grid-item"></div>
+            <div class="grid-item">
+                <div id="{{ item.eng }}" class="menu_item_card">
+                    <img src="{{ item.image.url }}" alt="Avatar">
+                    <div class="container">
+                        <h4 data-toggle="modal" data-target="#myModal" ><b>{{ item.title}}</b></h4>
+                        <p>{% if item.description %}{{ item.description }}{% endif %}</p>
+                        <div class="item_price">{{ item.price }}T</div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-item"></div>
+        </div>
+    {% endfor %}
+{% endif %}
+</body>
+</html>
