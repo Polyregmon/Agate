@@ -3,43 +3,90 @@
 <html>
 <head>
     <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static "blog/styles.css" %}">
 </head>
 
 <body>
+<div class="section" onclick="window.location='#omlet'" id="breakfast" data-lable="breakfast"><a href="#">Breakfast</a></div>
+<div class="section" onclick="window.location='#coffee'" id="coffee" data-lable="coffee"><a href="#">Coffee</a></div>
+<div class="section" onclick="window.location='#lemonade'" id="cocktail" data-lable="cocktail "><a href="#">Mocktail</a></div>
 
-<div class="scroll_container">
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-    <a href="#">food</a>
-</div>
-<br><br><br><br><br><br><br><br><br><br>
+
+<script>
+    function activateNavigation() {
+        const sections = document.querySelectorAll(".section");
+        const navContainer = document.createElement("nav");
+        const navItems = Array.from(sections).map(section => {
+            return `
+                            <div class="nav-item" data-for-section="${section.id}">
+                                <a href="#${section.id}" class="nav-link">${section.dataset.lable}</a>
+                            </div>
+                    `;
+        });
+
+        navContainer.classList.add("nav");
+        navContainer.innerHTML = navItems.join("")
+
+        const observer = new IntersectionObserver(entries => {
+
+            document.querySelectorAll(".nav-link").forEach(navLink =>{
+                navLink.classList.remove("nav-link-selected")
+            });
+
+            const visibleSection = entries.filter(entery => entery.isIntersecting)[0];
+
+            document.querySelector(`.nav-item[data-for-section="${visibleSection.target.id}"] .nav-link`).classList.add("nav-link-selected");
+
+        }, {threshold: 0.5});
+
+        sections.forEach(section => observer.observe(section));
+
+        document.body.appendChild(navContainer);
+
+    }
+
+    activateNavigation();
+</script>
 {% if items %}
+    <div class="grid-container">
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <div class="titlebox">
+                <h2 id="#Breakfast">
+                    Breakfast
+                </h2>
+            </div>
+        </div>
+    </div>
     {% for item in items %}
         <div class="grid-container">
             <div class="grid-item"></div>
             <div class="grid-item">
                 <div id="{{ item.eng }}" class="menu_item_card">
-                    <img src="{{ item.image.url }}" alt="Avatar">
+                    {% if item.image %}<img src="{{ item.image.url }}" alt="Avatar">{% endif %}
                     <div class="container">
-                        <h4 data-toggle="modal" data-target="#myModal" ><b>{{ item.title}}</b></h4>
-                        <p>{% if item.description %}{{ item.description }}{% endif %}</p>
+                        <h4><b>{{ item.title}}</b></h4>
+                        {% if item.description %}<p>{{ item.description }}</p>{% endif %}
                         <div class="item_price">{{ item.price }}T</div>
                     </div>
                 </div>
             </div>
-            <div class="grid-item"></div>
         </div>
     {% endfor %}
+    <div class="grid-container">
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <div id="Mocktail" class="titlebox">
+                <h2>
+                    Mocktail
+                </h2>
+            </div>
+        </div>
+    </div>
+
 {% endif %}
 </body>
 </html>
